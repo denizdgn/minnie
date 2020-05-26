@@ -18,24 +18,23 @@ wget https://github.com/CSB-KaracaLab/minnie/archive/master.zip
 cd minnie
 
 bash setup.sh
+
 ```
-setup.sh script installs the required dependencies together with the first version of interfacea (https://zenodo.org/badge/latestdoi/136096537). It finally calls execute.sh script, which sets proper aliases and updates your .bashrc file. 
+setup.sh script installs the required dependencies together with the first version of interfacea (https://zenodo.org/badge/latestdoi/136096537). 
+It finally calls execute.sh script, which sets proper aliases and updates your .bashrc file. 
 
 ## Activate minnie
 
-After the proper environment is set
+When the environment is set
 ```
-conda activate minnie
+source ~/.bashrc
 ```
-You need to repeat this whenever you will use minnie.
 
 ## Run minnie 
 
-All these commands are also provided in pipeline.sh
+These commands should be run in your project folder where you ensembles are located. 
 
-These commands should be run in your project folder where you ensembles are located
-
-To splot trajectories into single frames
+To split trajectories into single frames where your project ids are sox4 & sox18
 ```
 minnie splitpdbs -cn sox4 sox18 -p sox4.pdb sox18.pdb
 ```
@@ -65,9 +64,10 @@ minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s specific
 
 minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s common
 ```
+All of these commands are also provided in pipeline.sh
 
 ## Troubleshoot
-If you would need to remove minnie from your conda packages
+If you would need to remove minnie from your conda setup
 ```
 conda env remove -n  minnie
 ```
