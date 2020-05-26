@@ -18,7 +18,6 @@ wget https://github.com/CSB-KaracaLab/minnie/archive/master.zip
 cd minnie
 
 bash setup.sh
-
 ```
 setup.sh script installs the required dependencies together with the first version of interfacea (https://zenodo.org/badge/latestdoi/136096537). 
 It finally calls execute.sh script, which sets proper aliases and updates your .bashrc file. 
