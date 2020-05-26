@@ -65,6 +65,8 @@ minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s common
 ```
 All of these commands are also provided in pipeline.sh
 
+The input and output of this example run is provided under example_run
+
 ## Troubleshoot
 If you would need to remove minnie from your conda setup
 ```
