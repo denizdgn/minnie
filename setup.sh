@@ -2,6 +2,7 @@
 
 # Set the right environment for minnie
 
+source ~/anaconda3/etc/profile.d/conda.sh
 conda env create -f environment.yml
 conda activate minnie
 cd interfacea
