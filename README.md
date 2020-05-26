@@ -1,7 +1,7 @@
 # minnie
 A structural ensemble analysis package for extracting molecular interaction fingerprints
 
-minnie functions under the umbrella of anaconda3 (with Python 3.7). So, before everything you will need to have anaconda3 installed.
+minnie functions under the umbrella of anaconda3 (with Python 3.6). So, before everything you will need to have anaconda3 installed.
 
 ## Clone the repository
 ```
