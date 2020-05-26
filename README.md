@@ -1,4 +1,4 @@
-<img src="logo.png" alt="logo" width="200" />
+<img src="logo.png" alt="logo" width="300" />
 
 
 A structural ensemble analysis package for extracting molecular interaction fingerprints
