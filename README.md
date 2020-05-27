@@ -125,15 +125,15 @@ sed 's/,/ /g' *_hbonds_compared_*_perres.csv | grep "protein-dna" | grep ":" | a
 ```
 
  Options to visualize each bond type are added to pipeline.sh !!\
- 
+
 ## Troubleshoot
-If you would need to see brief descriptions of the minnie's subcommands
+If you would need to see brief descriptions of the minnie's options
 
 ```
 minnie --help
 minnie <subcommand> --help
 ```
-An example of help command - to retrieve usage information of the `minnie splitpdbs` subcommand
+An example of help command - to retrieve usage information of the `minnie splitpdbs` option
 
 ```
 $ minnie splitpdbs --help
