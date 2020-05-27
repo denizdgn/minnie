@@ -5,7 +5,6 @@ path_to_scripts=$(pwd)
 chmod +x minnie.py
 
 
-source ~/anaconda3/etc/profile.d/conda.sh
 
 echo '##### Required for minnie #####' >> ~/.bashrc
 echo "conda activate minnie" >> ~/.bashrc
