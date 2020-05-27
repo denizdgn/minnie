@@ -50,7 +50,8 @@ source ~/.bashrc
 
 ## **Run minnie**
 
-**1) Your trajectory should be saved in an ensemble format while different conformers are seperated by ENDMDL. Then splitpdbs option of minnie is used to split your trajectories into single frames.**\
+**1) Your trajectory should be saved in an ensemble format while different conformers are separated by ENDMDL. Then `splitpdbs` option of minnie is used to split your trajectories into single frames.**\
+\
 The resulting frames are saved under projectID1/02_frames & projectID2/02_frames.
 ```
 minnie splitpdbs -cn projectID1 projectID2 -p ensemble1.pdb ensemble2.pdb
@@ -59,8 +60,8 @@ In our toy model (as provided under example_run), the project id folders (-cn, i
 ```
 minnie splitpdbs -cn sox4 sox18 -p sox4.pdb sox18.pdb
 ```
-
-**2) When the individual frames are generated in your project folders, their inter-monomer interactions (hydrogen bonds, ionic, hydrophobic and ring stacking interactions) are calculated with the findbonds option. The interactions here are calculated with the interfacea python package.**\
+\
+**2) When the individual frames are generated in your project folders, their inter-monomer interactions (hydrogen bonds, ionic, hydrophobic and ring stacking interactions) are calculated with the `findbonds option. The interactions here are calculated with the interfacea python package.**\
 \
 The results are saved in the csv format under projectID1/03_interfacea_results & projectID2/03_interfacea_results.\
 You also have option to calculate intra-monomer interactions.
@@ -75,8 +76,8 @@ minnie findbonds -cn sox4 -p sox4/02_frames/* -i all
 
 minnie findbonds -cn sox18 -p sox18/02_frames/* -i all
 ```
-
-**3) The observed interactions are filtered according to a user-defined observation frequency, such that only the interactions that there at least for the x% of the simulation time will be kept. This is achieved with the timefilter option.**
+\
+**3) The observed interactions are filtered according to a user-defined observation frequency, such that only the interactions that there at least for the x% of the simulation time will be kept. This is achieved with the `timefilter` option.**
 ```
 minnie timefilter -f projectID1/03_interfacea_results/*/projectID1_merged_*.csv -cn sox4 --per observation_freq
 
@@ -89,7 +90,7 @@ minnie timefilter -f sox4/03_interfacea_results/*/sox4_merged_*.csv -cn sox4 --p
 minnie timefilter -f sox18/03_interfacea_results/*/sox18_merged_*.csv -cn sox18 --per 25
 ```
 
-**4) At this step of minnie, common and distinct interaction profiles among the two filtered cases are calculated with the compareCX option.**
+**4) At this step of minnie, common and distinct interaction profiles among the two filtered cases are calculated with the `compareCX` option.**
 ```
 minnie compareCX -cn projectID1 projectID2 --per observation_freq
 ```
@@ -112,9 +113,9 @@ minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s common
 ```
 
 All of the example toy-model-related commands are provided in pipeline.sh
-
+\
 **6) Aaaand, To visualize minnie results with Pymol**
-
+\
 To be run in projectID/05_compare_complex/\*_freq_filtered/\*_freq_perres/complex_specific_
 
 
@@ -125,7 +126,7 @@ sed 's/,/ /g' *_hbonds_compared_*_perres.csv | grep "protein-dna" | grep ":" | a
 
  Options to visualize each bond type are added to pipeline.sh !!
 
-
+\
 ## Troubleshoot
 If you would need to see brief descriptions of the minnie's subcommands
 
