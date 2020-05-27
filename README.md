@@ -1,21 +1,32 @@
 <img src="logo.png" alt="logo" width="200" />
 
 
-A structural ensemble analysis package for extracting molecular interaction fingerprints
+minnie - a structural ensemble analysis package to deduce the fingerprints of binding
 
-minnie functions under the umbrella of anaconda3 (with Python 3.6). So, before everything you will need to have anaconda3 installed.
+developed by Deniz Dogan and Ezgi Karaca
+
+## Motivation
+The molecular dynamics (MD) simulations produce extremely valuable information on the functionally important interactions. A prominent way to define these interactions relies on the characterization of inter-molecular contacts that are persistently similar or different across different simulation trajectories. Expanding on this notion, we have developed the python package, minnie (Molecular INteractioN fIngErprints), which:
+
+(i) calculates  inter-/intra-molecular hydrogen bonds, ionic, hydrophobic and ring stacking interactions by using interfacea python package;
+(ii) filters out the non-essential interactions via a user-defined observation frequency filter;
+(iii) compares the common and distinct interactions across given simulation sets;
+(iv) outputs the common and distinct interaction profiles in table format and compares their distribution with box-and-whisker plots.
+
+## Capabilities
+minnie compares the simulation sets of any complex type (i.e. protein-protein/protein-DNA/protein-ligand complex). As long as the residue numbering is comparable, minnie finds similar and distinct interactions between two simulations of the same system, between two highly homologous systems, as well as between wild-type and mutant states of the complex under study.
 
 ## Clone the repository
 ```
 git clone https://github.com/CSB-KaracaLab/minnie.git
 ```
-OR
+or, if you don't use git:
 ```
 wget https://github.com/CSB-KaracaLab/minnie/archive/master.zip
 ```
 
 ## Set up the right environment for minnie
-
+minnie functions under the umbrella of anaconda3 (with Python 3.6). So, before everything, anaconda3 should be installed.
 ```
 cd minnie
 conda env create -f environment.yml
@@ -28,7 +39,7 @@ bash execute.sh
 
 ```
 setup.sh script installs the required dependencies together with the first version of interfacea (https://zenodo.org/badge/latestdoi/136096537). 
-It finally calls execute.sh script, which sets proper aliases and updates your .bashrc file. 
+setup.sh finally calls execute.sh script, which sets proper aliases and updates your .bashrc file. 
 
 ## Activate minnie
 
@@ -39,46 +50,76 @@ source ~/.bashrc
 
 ## Run minnie 
 
-These commands should be run in your project folder where you ensembles are located. 
-
-To split trajectories into single frames where your project ids are sox4 & sox18
+1) Your trajectory should be saved in an ensemble format while different conformers are seperated by ENDMDL. Then splitpdbs option of minnie is used to split your trajectories into single frames. The resulting frames are saved under projectID1/02_frames & projectID2/02_frames.
+```
+minnie splitpdbs -cn projectID1 projectID2 -p ensemble1.pdb ensemble2.pdb
+```
+In our toy model (as provided under example_run), the project id folders (-cn, i.e. complex names) are defined as sox4 & sox18, where the ensembles are fed as sox4.pdb & sox18.pdb.
 ```
 minnie splitpdbs -cn sox4 sox18 -p sox4.pdb sox18.pdb
 ```
 
-This part calculates all types of inter-monomer interactions
+2) When the individual frames are generated in your project folders, their inter-monomer interactions (hydrogen bonds, ionic, hydrophobic and ring stacking interactions) are calculated with the findbonds option. The interactions here are calculated with the interfacea python package. The results are saved in the csv format under projectID1/03_interfacea_results & projectID2/03_interfacea_results.
+```
+minnie findbonds -cn projectID1 -p projectID1/02_frames/* -i all
+
+minnie findbonds -cn projectID2 -p projectID2/02_frames/* -i all
+```
+In the toy model, the project id folders are kept as defined in the previous step, i.e., sox4 & sox18.
 ```
 minnie findbonds -cn sox4 -p sox4/02_frames/* -i all
 
 minnie findbonds -cn sox18 -p sox18/02_frames/* -i all
 ```
 
-Apply critical interaction filter
+3) The observed interactions are filtered according to a user-defined observation frequency, such that only the interactions that there at least for the x% of the simulation time will be kept. This is achieved with the timefilter option. 
+```
+minnie timefilter -f projectID1/03_interfacea_results/*/projectID1_merged_*.csv -cn sox4 --per observation_freq
+
+minnie timefilter -f projectID2/03_interfacea_results/*/projectID2_merged_*.csv -cn sox18 --per observation_freq
+```
+The toy model interactions, which are observed for at least 25% of the simulation are kept.
 ```
 minnie timefilter -f sox4/03_interfacea_results/*/sox4_merged_*.csv -cn sox4 --per 25
 
 minnie timefilter -f sox18/03_interfacea_results/*/sox18_merged_*.csv -cn sox18 --per 25
 ```
 
-Calculate common and distinct interactions in two cases
+4) At this step of minnie, common and distinct interaction profiles among the two filtered cases are calculated with the compareCX option.
+```
+minnie compareCX -cn projectID1 projectID2 --per observation_freq
+```
+The 25%-filtered interactions of the toy systems are analyzed. 
 ```
 minnie compareCX -cn sox4 sox18 --per 25
 ```
 
-aaaaand build graphs!
+5) Finally, the common and distinct interaction distribution comparisons are delivered as box-and-whisker plots.
+```
+minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b complex_type -s specific
+
+minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b complex_type -s common
+```
+which translate into the following for our toy model:
 ```
 minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s specific
 
 minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s common
 ```
-All of these commands are also provided in pipeline.sh
+
+All of the example toy-model-related commands are provided in pipeline.sh
 
 ## Troubleshoot
+THE USAGE OF HELP
+
 If you would need to remove minnie from your conda setup
 ```
 conda env remove -n  minnie
 ```
 Also remove the minnie-related lines from your .bashrc
+
+## Acknowledgements
+We are grateful to Dr. João Rodrigues (@JoaoRodrigues) for making his interfacea package available for minnie!
 
 ## Contact
 ezgi.karaca@ibg.edu.tr
