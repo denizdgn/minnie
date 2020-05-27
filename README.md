@@ -18,8 +18,13 @@ wget https://github.com/CSB-KaracaLab/minnie/archive/master.zip
 
 ```
 cd minnie
-
-bash setup.sh
+conda env create -f environment.yml
+conda activate minnie
+cd interfacea
+python setup.py build
+python setup.py install
+cd ..
+bash execute.sh
 
 ```
 setup.sh script installs the required dependencies together with the first version of interfacea (https://zenodo.org/badge/latestdoi/136096537). 
