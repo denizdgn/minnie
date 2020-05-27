@@ -48,7 +48,7 @@ When the environment is set
 source ~/.bashrc
 ```
 
-## Run minnie
+## **Run minnie**
 
 **1) Your trajectory should be saved in an ensemble format while different conformers are seperated by ENDMDL. Then splitpdbs option of minnie is used to split your trajectories into single frames. The resulting frames are saved under projectID1/02_frames & projectID2/02_frames.**
 ```
