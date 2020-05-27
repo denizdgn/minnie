@@ -109,9 +109,9 @@ minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s common
 
 All of the example toy-model-related commands are provided in pipeline.sh
 
-6) Finally, how to visualize minnie results with Pymol
+6) **AAAAND, To visualize minnie results with Pymol**
 
-#to be run in projectID/05_compare_complex/*_freq_filtered/*_freq_perres/complex_*
+To be run in projectID/05_compare_complex/*_freq_filtered/*_freq_perres/complex_*
 
 ```
 sed 's/,/ /g' *_hbonds_compared_*_perres.csv | grep "protein-dna" | grep ":" | awk '{printf "show sticks, (resi %s and chain %s) + (resi %s and chain %s) \n", $6,$2,$7,$3}' | sort -u > pymol_hbonds.pml
@@ -128,6 +128,7 @@ sed 's/,/ /g' *_ionic_compared_*_perres.csv | grep "protein-dna" | grep ":" | aw
 sed 's/,/ /g' *_ring_stacking_compared_*_perres.csv | grep "protein-dna" | grep ":" | awk '{printf "show sticks, (resi %s and chain %s) + (resi %s and chain %s) \n", $6,$2,$7,$3}' | sort -u > pymol_ring_stacking.pml
 sed 's/,/ /g' *_ring_stacking_compared_*_perres.csv | grep "protein-dna" | grep ":" | awk '{printf "distance i. %s and n. %s and chain %s, i. %s and n. %s and chain %s\n", $6,$8,$2,$7,$9,$3}' | sort -u | sed 's/OP1/O1P/g' | sed 's/OP2/O2P/g' >> pymol_ring_stacking.pml
 ```
+
 
 
 
