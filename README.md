@@ -38,8 +38,8 @@ cd ..
 bash execute.sh
 
 ```
-setup.sh script installs the required dependencies together with the first version of interfacea (https://zenodo.org/badge/latestdoi/136096537). 
-setup.sh finally calls execute.sh script, which sets proper aliases and updates your .bashrc file. 
+setup.sh script installs the required dependencies together with the first version of interfacea (https://zenodo.org/badge/latestdoi/136096537).
+setup.sh finally calls execute.sh script, which sets proper aliases and updates your .bashrc file.
 
 ## Activate minnie
 
@@ -48,7 +48,7 @@ When the environment is set
 source ~/.bashrc
 ```
 
-## Run minnie 
+## Run minnie
 
 1) Your trajectory should be saved in an ensemble format while different conformers are seperated by ENDMDL. Then splitpdbs option of minnie is used to split your trajectories into single frames. The resulting frames are saved under projectID1/02_frames & projectID2/02_frames.
 ```
@@ -72,7 +72,7 @@ minnie findbonds -cn sox4 -p sox4/02_frames/* -i all
 minnie findbonds -cn sox18 -p sox18/02_frames/* -i all
 ```
 
-3) The observed interactions are filtered according to a user-defined observation frequency, such that only the interactions that there at least for the x% of the simulation time will be kept. This is achieved with the timefilter option. 
+3) The observed interactions are filtered according to a user-defined observation frequency, such that only the interactions that there at least for the x% of the simulation time will be kept. This is achieved with the timefilter option.
 ```
 minnie timefilter -f projectID1/03_interfacea_results/*/projectID1_merged_*.csv -cn sox4 --per observation_freq
 
@@ -89,7 +89,7 @@ minnie timefilter -f sox18/03_interfacea_results/*/sox18_merged_*.csv -cn sox18 
 ```
 minnie compareCX -cn projectID1 projectID2 --per observation_freq
 ```
-The 25%-filtered interactions of the toy systems are analyzed. 
+The 25%-filtered interactions of the toy systems are analyzed.
 ```
 minnie compareCX -cn sox4 sox18 --per 25
 ```
@@ -110,7 +110,35 @@ minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s common
 All of the example toy-model-related commands are provided in pipeline.sh
 
 ## Troubleshoot
-THE USAGE OF HELP
+If you would need to see details of the minnie's subcommands
+
+```
+minnie --help
+minnie <subcommand> --help
+
+```
+
+
+```
+$ minnie splitpdbs --help
+
+Usage: minnie splitpdbs
+                        -cn, --complexName     <string> <string>
+                                                Project ID of your complex(s)
+
+                        -p, --pdbs             [<traj.pdb>] [<traj.pdb>]
+                                               Trajectory ID of your complex(s)
+
+
+
+
+Usage example:
+
+ minnie splitpdbs -cn sox4 sox18 -p sox4.pdb sox18.pdb
+ minnie splitpdbs -cn sox4  -p sox4.pdb
+
+```
+
 
 If you would need to remove minnie from your conda setup
 ```
