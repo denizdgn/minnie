@@ -1,31 +1,32 @@
 <img src="logo.png" alt="logo" width="200" />
 
 
-minnie (Molecular INteractioN fIngErprints) - a structural ensemble analysis package 
+minnie - a structural ensemble analysis package to deduce the fingerprints of binding
 
 ## Motivation
-The function of biomolecular complexes is encoded across their in-teraction surfaces. Towards dissecting this function, the first step is the acquisition of high-resolution interface information. The second step is to understand the dynamics of the resolved interface. To that end, the molecular dynamics (MD) simulations produce extremely valuable information on the functionally important interactions. A prominent way to define these essential interactions relies on the characterization of inter-molecular contacts that are persistently similar or different across different simulations. Expanding on this notion, we have developed the python package, minnie, which:
-(i) calculates the inter-/intra-molecular hydrogen bonds, ionic, hydrophobic and ring stacking interactions by using interfacea python package;
+The molecular dynamics (MD) simulations produce extremely valuable information on the functionally important interactions. A prominent way to define these interactions relies on the characterization of inter-molecular contacts that are persistently similar or different across different simulation trajectories. Expanding on this notion, we have developed the python package, minnie (Molecular INteractioN fIngErprints), which:
+
+(i) calculates  inter-/intra-molecular hydrogen bonds, ionic, hydrophobic and ring stacking interactions by using interfacea python package;
 (ii) filters out the non-essential interactions via a user-defined observation frequency filter;
-(iii) compares the common and distinct interactions across the given simulation sets;
+(iii) compares the common and distinct interactions across given simulation sets;
 (iv) outputs the common and distinct interaction profiles in table format and compares their distribution with box-and-whisker plots.
-minnie compares two distinct simulation sets of any complex type (i.e. protein-protein/protein-DNA/protein-ligand complex). As lonf as the numbering of the systems are the same, minnie can also be used to find similar and distinct interactions between two highly homologous systems, as well as between wild-type and mutant states of the complex under study.
+
+## Capabilities
+minnie compares the simulation sets of any complex type (i.e. protein-protein/protein-DNA/protein-ligand complex). As long as the residue numbering is comparable, minnie finds similar and distinct interactions between two simulations of the same system, between two highly homologous systems, as well as between wild-type and mutant states of the complex under study.
 
 # The package
-
-minnie functions under the umbrella of anaconda3 (with Python 3.6). So, before everything you will need to have anaconda3 installed.
+minnie functions under the umbrella of anaconda3 (with Python 3.6). So, before everything, anaconda3 should be installed.
 
 ## Clone the repository
 ```
 git clone https://github.com/CSB-KaracaLab/minnie.git
 ```
-OR
+or, if you don't use git:
 ```
 wget https://github.com/CSB-KaracaLab/minnie/archive/master.zip
 ```
 
 ## Set up the right environment for minnie
-
 ```
 cd minnie
 
