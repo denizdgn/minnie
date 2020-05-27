@@ -14,9 +14,6 @@ The molecular dynamics (MD) simulations produce extremely valuable information o
 ## Capabilities
 minnie compares the simulation sets of any complex type (i.e. protein-protein/protein-DNA/protein-ligand complex). As long as the residue numbering is comparable, minnie finds similar and distinct interactions between two simulations of the same system, between two highly homologous systems, as well as between wild-type and mutant states of the complex under study.
 
-# The package
-minnie functions under the umbrella of anaconda3 (with Python 3.6). So, before everything, anaconda3 should be installed.
-
 ## Clone the repository
 ```
 git clone https://github.com/CSB-KaracaLab/minnie.git
@@ -27,13 +24,14 @@ wget https://github.com/CSB-KaracaLab/minnie/archive/master.zip
 ```
 
 ## Set up the right environment for minnie
+minnie functions under the umbrella of anaconda3 (with Python 3.6). So, before everything, anaconda3 should be installed.
 ```
 cd minnie
 
 bash setup.sh
 ```
 setup.sh script installs the required dependencies together with the first version of interfacea (https://zenodo.org/badge/latestdoi/136096537). 
-It finally calls execute.sh script, which sets proper aliases and updates your .bashrc file. 
+setup.sh finally calls execute.sh script, which sets proper aliases and updates your .bashrc file. 
 
 ## Activate minnie
 
