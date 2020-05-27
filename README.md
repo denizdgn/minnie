@@ -111,7 +111,7 @@ All of the example toy-model-related commands are provided in pipeline.sh
 
 **6) Aaaand, To visualize minnie results with Pymol**
 
-To be run in projectID/05_compare_complex/\*_freq_filtered/\*_freq_perres/complex_\*
+To be run in projectID/05_compare_complex/\*_freq_filtered/\*_freq_perres/complex_specific_
 
 
 ```
