@@ -59,7 +59,8 @@ In our toy model (as provided under example_run), the project id folders (-cn, i
 minnie splitpdbs -cn sox4 sox18 -p sox4.pdb sox18.pdb
 ```
 
-**2) When the individual frames are generated in your project folders, their inter-monomer interactions (hydrogen bonds, ionic, hydrophobic and ring stacking interactions) are calculated with the findbonds option. The interactions here are calculated with the interfacea python package. The results are saved in the csv format under projectID1/03_interfacea_results & projectID2/03_interfacea_results.**
+**2) When the individual frames are generated in your project folders, their inter-monomer interactions (hydrogen bonds, ionic, hydrophobic and ring stacking interactions) are calculated with the findbonds option. The interactions here are calculated with the interfacea python package.**
+The results are saved in the csv format under projectID1/03_interfacea_results & projectID2/03_interfacea_results. You also have option to calculate intra-monomer interactions.
 ```
 minnie findbonds -cn projectID1 -p projectID1/02_frames/* -i all
 
@@ -117,7 +118,6 @@ To be run in projectID/05_compare_complex/\*_freq_filtered/\*_freq_perres/comple
 ```
 sed 's/,/ /g' *_hbonds_compared_*_perres.csv | grep "protein-dna" | grep ":" | awk '{printf "show sticks, (resi %s and chain %s) + (resi %s and chain %s) \n", $6,$2,$7,$3}' | sort -u > pymol_hbonds.pml
 sed 's/,/ /g' *_hbonds_compared_*_perres.csv | grep "protein-dna" | grep ":" | awk '{printf "distance i. %s and n. %s and chain %s, i. %s and n. %s and chain %s\n", $6,$8,$2,$7,$9,$3}' | sort -u | sed 's/OP1/O1P/g' | sed 's/OP2/O2P/g' >> pymol_hbonds.pml
-
 ```
 
  Options to visualize each bond type are added to pipeline.sh !!
