@@ -3,6 +3,8 @@
 
 minnie - a structural ensemble analysis package to deduce the fingerprints of binding
 
+developed by Deniz Dogan and Ezgi Karaca
+
 ## Motivation
 The molecular dynamics (MD) simulations produce extremely valuable information on the functionally important interactions. A prominent way to define these interactions relies on the characterization of inter-molecular contacts that are persistently similar or different across different simulation trajectories. Expanding on this notion, we have developed the python package, minnie (Molecular INteractioN fIngErprints), which:
 
