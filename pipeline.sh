@@ -20,7 +20,6 @@ minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s common
 
 
 #To visualize minnie results with Pymol!
-
 for projectID in  sox4 sox18
 do
   cd "$projectID/05_compare_complex/25_freq_filtered/25_freq_perres/complex_specific"
