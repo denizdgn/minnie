@@ -29,8 +29,14 @@ wget https://github.com/CSB-KaracaLab/minnie/archive/master.zip
 minnie functions under the umbrella of anaconda3 (with Python 3.6). So, before everything, anaconda3 should be installed.
 ```
 cd minnie
+conda env create -f environment.yml
+conda activate minnie
+cd interfacea
+python setup.py build
+python setup.py install
+cd ..
+bash execute.sh
 
-bash setup.sh
 ```
 setup.sh script installs the required dependencies together with the first version of interfacea (https://zenodo.org/badge/latestdoi/136096537). 
 setup.sh finally calls execute.sh script, which sets proper aliases and updates your .bashrc file. 
