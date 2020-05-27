@@ -139,7 +139,7 @@ If you would need to see details of the minnie's subcommands
 minnie --help
 minnie <subcommand> --help
 ```
-An example of help command to retrieve detailed information regarding specified subcommand
+An example of help command to retrieve detailed information of splitpdbs subcommand
 
 ```
 $ minnie splitpdbs --help
