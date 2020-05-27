@@ -134,13 +134,13 @@ sed 's/,/ /g' *_ring_stacking_compared_*_perres.csv | grep "protein-dna" | grep 
 
 
 ## Troubleshoot
-If you would need to see details of the minnie's subcommands
+If you would need to see brief descriptions of the minnie's subcommands
 
 ```
 minnie --help
 minnie <subcommand> --help
 ```
-An example of help command to retrieve detailed information of splitpdbs subcommand
+An example of help command - to retrieve usage information of the `minnie splitpdbs` subcommand
 
 ```
 $ minnie splitpdbs --help
