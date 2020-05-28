@@ -38,7 +38,7 @@ cd ..
 bash execute.sh
 
 ```
-setup.sh script installs the required dependencies together with the first version of interfacea (https://zenodo.org/badge/latestdoi/136096537).
+setup.sh script installs the required dependencies together with the first version of [interfacea](https://zenodo.org/record/3516439#.Xs91eBMzZBw).
 setup.sh finally calls execute.sh script, which sets proper aliases and updates your .bashrc file.
 
 ## Activate minnie
@@ -64,7 +64,8 @@ minnie splitpdbs -cn sox4 sox18 -p sox4.pdb sox18.pdb
 **2) When the individual frames are generated in your project folders, their inter-monomer interactions (hydrogen bonds, ionic, hydrophobic and ring stacking interactions) are calculated with the `findbonds` option. The interactions here are calculated with the interfacea python package.**\
 \
 The results are saved in the csv format under projectID1/03_interfacea_results & projectID2/03_interfacea_results.\
-You also have option to calculate intra-monomer interactions.
+**`-i all`** calculates hbonds, ionic, hydrophobic, ring_stacking interactions. 
+You also have the option to calculate intra-monomer interactions with **`-intra True`** flag. 
 ```
 minnie findbonds -cn projectID1 -p projectID1/02_frames/* -i all
 
@@ -101,9 +102,9 @@ minnie compareCX -cn sox4 sox18 --per 25
 
 **5) The common and distinct interaction distribution comparisons are delivered as box-and-whisker plots.**
 ```
-minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b complex_type -s specific
+minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b interaction_type -s specific
 
-minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b complex_type -s common
+minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b interaction_type -s common
 ```
 which translate into the following for our toy model:
 ```
@@ -112,7 +113,7 @@ minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s specific
 minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s common
 ```
 
-All of the example toy-model-related commands are provided in pipeline.sh\
+All of the example toy-model-related commands are provided in pipeline.sh
 \
 **6) Aaaand, To visualize minnie results with Pymol**\
 \
@@ -133,6 +134,7 @@ minnie clean -cn 'projectID1' 'projectID2'
 minnie clean -cn 'sox4' 'sox18'
  ```
 \
+
 ## Troubleshoot
 If you would need to see brief descriptions of the minnie's options
 
@@ -152,16 +154,12 @@ Usage: minnie splitpdbs
                         -p, --pdbs             [<traj.pdb>] [<traj.pdb>]
                                                Trajectory ID of your complex(s)
 
-
-
-
 Usage example:
 
  minnie splitpdbs -cn sox4 sox18 -p sox4.pdb sox18.pdb
  minnie splitpdbs -cn sox4  -p sox4.pdb
 
 ```
-
 
 If you would need to remove minnie from your conda setup
 ```
@@ -170,7 +168,7 @@ conda env remove -n  minnie
 Also remove the minnie-related lines from your .bashrc
 
 ## Acknowledgements
-We are grateful to Dr. João Rodrigues (@JoaoRodrigues) for making his interfacea package available for minnie!
+We are grateful to Dr. João Rodrigues ([@JoaoRodrigues](https://github.com/JoaoRodrigues)) for making his interfacea package available for minnie! We also thank Tulay Karakulak ([@KarakulakTulay](https://github.com/KarakulakTulay)) for her contribution to the conceptualization of this work.
 
 ## Contact
 ezgi.karaca@ibg.edu.tr
