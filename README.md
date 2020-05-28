@@ -161,7 +161,7 @@ conda env remove -n  minnie
 Also remove the minnie-related lines from your .bashrc
 
 ## Acknowledgements
-We are grateful to Dr. João Rodrigues ([@KarakulakTulay](https://github.com/JoaoRodrigues)) for making his interfacea package available for minnie! We also thank Tulay Karakulak ([@KarakulakTulay](https://github.com/KarakulakTulay)) for her contribution to the conceptualization of this work.
+We are grateful to Dr. João Rodrigues ([@JoaoRodrigues](https://github.com/JoaoRodrigues)) for making his interfacea package available for minnie! We also thank Tulay Karakulak ([@KarakulakTulay](https://github.com/KarakulakTulay)) for her contribution to the conceptualization of this work.
 
 ## Contact
 ezgi.karaca@ibg.edu.tr
