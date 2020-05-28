@@ -101,9 +101,9 @@ minnie compareCX -cn sox4 sox18 --per 25
 
 **5) The common and distinct interaction distribution comparisons are delivered as box-and-whisker plots.**
 ```
-minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b complex_type -s specific
+minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b molecule_type -s specific
 
-minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b complex_type -s common
+minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b molecule_type -s common
 ```
 which translate into the following for our toy model:
 ```
@@ -124,7 +124,8 @@ sed 's/,/ /g' *_hbonds_compared_*_perres.csv | grep "protein-dna" | grep ":" | a
 sed 's/,/ /g' *_hbonds_compared_*_perres.csv | grep "protein-dna" | grep ":" | awk '{printf "distance i. %s and n. %s and chain %s, i. %s and n. %s and chain %s\n", $6,$8,$2,$7,$9,$3}' | sort -u | sed 's/OP1/O1P/g' | sed 's/OP2/O2P/g' >> pymol_hbonds.pml
 ```
 
- Options to visualize each bond type are added to pipeline.sh !!\
+Options to visualize each bond type are added to pipeline.sh !!
+ \
 
 ## Troubleshoot
 If you would need to see brief descriptions of the minnie's options
@@ -145,16 +146,12 @@ Usage: minnie splitpdbs
                         -p, --pdbs             [<traj.pdb>] [<traj.pdb>]
                                                Trajectory ID of your complex(s)
 
-
-
-
 Usage example:
 
  minnie splitpdbs -cn sox4 sox18 -p sox4.pdb sox18.pdb
  minnie splitpdbs -cn sox4  -p sox4.pdb
 
 ```
-
 
 If you would need to remove minnie from your conda setup
 ```
