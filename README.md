@@ -38,7 +38,7 @@ cd ..
 bash execute.sh
 
 ```
-setup.sh script installs the required dependencies together with the first version of interfacea (https://zenodo.org/badge/latestdoi/136096537).
+setup.sh script installs the required dependencies together with the first version of [interfacea](https://zenodo.org/badge/latestdoi/136096537).
 setup.sh finally calls execute.sh script, which sets proper aliases and updates your .bashrc file.
 
 ## Activate minnie
