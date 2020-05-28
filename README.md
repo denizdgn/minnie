@@ -126,13 +126,13 @@ sed 's/,/ /g' *_hbonds_compared_*_perres.csv | grep "protein-dna" | grep ":" | a
 
  Options to visualize each bond type are added to pipeline.sh !!
 \
- **7) Finally, to clean unnecessary folders**\
- \
+**7) Finally, to clean unnecessary folders**\
+
  ```
 minnie clean -cn 'projectID1' 'projectID2'
 minnie clean -cn 'sox4' 'sox18'
  ```
-\
+
 ## Troubleshoot
 If you would need to see brief descriptions of the minnie's options
 
