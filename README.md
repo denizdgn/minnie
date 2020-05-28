@@ -80,9 +80,9 @@ minnie findbonds -cn sox18 -p sox18/02_frames/* -i all
 \
 **3) The observed interactions are filtered according to a user-defined observation frequency, such that only the interactions that there at least for the x% of the simulation time will be kept. This is achieved with the `timefilter` option.**
 ```
-minnie timefilter -f projectID1/03_interfacea_results/*/projectID1_merged_*.csv -cn sox4 --per observation_freq
+minnie timefilter -f projectID1/03_interfacea_results/*/projectID1_merged_*.csv -cn projectID1 --per observation_freq
 
-minnie timefilter -f projectID2/03_interfacea_results/*/projectID2_merged_*.csv -cn sox18 --per observation_freq
+minnie timefilter -f projectID2/03_interfacea_results/*/projectID2_merged_*.csv -cn projectID2 --per observation_freq
 ```
 The toy model interactions, which are observed for at least 25% of the simulation are kept.
 ```
