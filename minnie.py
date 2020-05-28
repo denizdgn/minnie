@@ -45,6 +45,7 @@ def option(*args,**kwargs):
 
 
 ###### ---- Subcommands ---- ######
+
 # ---- split pdbs ---- #
 @option('--help','-h',action='store_true')
 @option('--complexName','-cn',dest="complexName",nargs="*", help="Project ID of your complex(s)")
@@ -230,81 +231,103 @@ def compareCX(self):
 @subcommand()
 def graph(self):
     """aaaaand graphs!"""
-    #try:
+    try:
+	    if self.help:
+	        print(f'\n\033[1mUsage: minnie graph  \n'
+	              f'                        -cn, --complexName     <string> <string>     \n'
+	              f'                                               Project IDs of your complex(s)\n\n'
+
+	              f'                        --per                  <float>                \n'
+	              f'                                               Observation frequency to classify an interaction as critical \n\n'
+
+
+	              f'                        -b, --between          [<protein-dna>/<all>] (all)   \n'
+	              f'                                               Between protein-dna or keep all \n\n'
+
+	              f'                        -c, --chainIDs         <string> <string>       \n'
+	              f'                                               Give ChainIDs to proceed\n\n'
+
+	              f'                        --filename             <string>                           \n'
+	              f'                                               Give a name to output file (optional)\n\n'
+
+	              f'                        --colors               [<hex colors>] ("#D9B4CC", "#6F81A6")     \n'
+	              f'                                               Color IDs of the complexes (optional)\n\n'
+
+
+	              f'                        -i                     [<hbonds>/<ionic>/<hydrophobic>/<ring_stacking>/<all>] (hbonds)    \n'
+	              f'                                               Calculates which types of interactions \n\n'
+
+	              f'                        -s                     [<specific>/<common>] (specific)                           \n'
+	              f'                                               Complex-specific or common interactions\033[0m \n\n\n\n'
+
+	            f'Please do not use "--between" and "--chainIDs" options at the same time\n\n'
+
+	            f'\n\033[1mUsage example:\033[0m\n\n'
+	              " minnie graph -cn 'sox4' 'sox18' --per 25 -i hbonds -s specific  -c A+B C --colors '#D9B4CC' '#6F81A6' \n"
+	              " minnie graph -cn 'sox4' 'sox18' --per 25 -i ionic -c A+B C  \n"
+	              " minnie graph -cn 'sox4' 'sox18' --per 25 -i ionic -b protein-dna \n"
+	              " minnie graph -cn 'sox4' 'sox18' --per 25 -i ionic -b protein-dna --filename sox4_sox18_protein_dna \n")
+	    elif (self.between) and (self.chains):
+	        raise Exception()
+	    elif self.intType == "all":
+	        print(self.between)
+	        for intTypex in ["hbonds","ionic","hydrophobic","ring_stacking"]:
+
+	            if  (self.between):
+	                print(intTypex)
+	                df_collec=graphs.filter_todnaall(self.complexName,self.between,self.spp,self.per,str(intTypex))
+	                graphs.draw_fig(df_collec, str(intTypex), self.complexName[0], self.complexName[1],
+	                                self.colors[0], self.colors[1],self.filename, self.spp)
+
+	            elif (self.chains):
+	                df_collec=graphs.filter_todraw(self.complexName,self.chains,self.spp,self.per,str(intTypex))
+	                graphs.draw_fig(df_collec, str(intTypex), self.complexName[0], self.complexName[1],
+	                                        self.colors[0], self.colors[1],self.filename, self.spp)
+
+	    elif self.between == "protein-dna":
+	        df_collec=graphs.filter_todnaall(self.complexName,self.between,self.spp,self.per,self.intType)
+	        graphs.draw_fig(df_collec, self.intType, self.complexName[0], self.complexName[1],
+	                        self.colors[0], self.colors[1],self.filename, self.spp)
+
+	    elif self.between == "all":
+	        df_collec=graphs.filter_todnaall(self.complexName,self.between,self.spp,self.per,self.intType)
+	        graphs.draw_fig(df_collec, self.intType, self.complexName[0], self.complexName[1],
+	                        self.colors[0], self.colors[1],self.filename, self.spp)
+	    else:
+	        df_collec=graphs.filter_todraw(self.complexName,self.chains,self.spp,self.per,self.intType)
+	        graphs.draw_fig(df_collec, self.intType, self.complexName[0], self.complexName[1],
+	                        self.colors[0], self.colors[1],self.filename, self.spp)
+    except TypeError:
+        print(f'\nPlease check given parameters''')
+
+    except Exception:
+        print(f'\nPlease, either use -b or -c option''')
+
+
+
+# ---- Clean  ---- #
+@option('--help','-h',action='store_true')
+@option('--complexName','-cn',nargs=2, help="Project ID of your complex(s)")
+@subcommand()
+def clean(self):
+    """To remove unnecessary folders"""
     if self.help:
-        print(f'\n\033[1mUsage: minnie graph  \n'
-              f'                        -cn, --complexName     <string> <string>     \n'
-              f'                                               Project IDs of your complex(s)\n\n'
+        print(f'\n\033[1mUsage: minnie clean \n'
+              f'                        -cn, --complexName     <string> <string>     \n '
+              f'                                               Project ID of your complex(s)\n\n'
 
-              f'                        --per                  <float>                \n'
-              f'                                               Observation frequency to classify an interaction as critical \n\n'
-
-
-              f'                        -b, --between          [<protein-dna>/<all>] (all)   \n'
-              f'                                               Between protein-dna or keep all \n\n'
-
-              f'                        -c, --chainIDs         <string> <string>       \n'
-              f'                                               Give ChainIDs to proceed\n\n'
-
-              f'                        --filename             <string>                           \n'
-              f'                                               Give a name to output file (optional)\n\n'
-
-              f'                        --colors               [<hex colors>] ("#D9B4CC", "#6F81A6")     \n'
-              f'                                               Color IDs of the complexes (optional)\n\n'
-
-
-              f'                        -i                     [<hbonds>/<ionic>/<hydrophobic>/<ring_stacking>/<all>] (hbonds)    \n'
-              f'                                               Calculates which types of interactions \n\n'
-
-              f'                        -s                     [<specific>/<common>] (specific)                           \n'
-              f'                                               Complex-specific or common interactions\033[0m \n\n\n\n'
-
-            f'Please do not use "--between" and "--chainIDs" options at the same time\n\n'
-
-            f'\n\033[1mUsage example:\033[0m\n\n'
-              " minnie graph -cn 'sox4' 'sox18' --per 25 -i hbonds -s specific  -c A+B C --colors '#D9B4CC' '#6F81A6' \n"
-              " minnie graph -cn 'sox4' 'sox18' --per 25 -i ionic -c A+B C  \n"
-              " minnie graph -cn 'sox4' 'sox18' --per 25 -i ionic -b protein-dna \n"
-              " minnie graph -cn 'sox4' 'sox18' --per 25 -i ionic -b protein-dna --filename sox4_sox18_protein_dna \n")
-    elif (self.between) and (self.chains):
-        raise Exception()
-    elif self.intType == "all":
-        print(self.between)
-        for intTypex in ["hbonds","ionic","hydrophobic","ring_stacking"]:
-
-            if  (self.between):
-                print(intTypex)
-                df_collec=graphs.filter_todnaall(self.complexName,self.between,self.spp,self.per,str(intTypex))
-                graphs.draw_fig(df_collec, str(intTypex), self.complexName[0], self.complexName[1],
-                                self.colors[0], self.colors[1],self.filename, self.spp)
-
-            elif (self.chains):
-                df_collec=graphs.filter_todraw(self.complexName,self.chains,self.spp,self.per,str(intTypex))
-                graphs.draw_fig(df_collec, str(intTypex), self.complexName[0], self.complexName[1],
-                                        self.colors[0], self.colors[1],self.filename, self.spp)
-
-    elif self.between == "protein-dna":
-        df_collec=graphs.filter_todnaall(self.complexName,self.between,self.spp,self.per,self.intType)
-        graphs.draw_fig(df_collec, self.intType, self.complexName[0], self.complexName[1],
-                        self.colors[0], self.colors[1],self.filename, self.spp)
-
-    elif self.between == "all":
-        df_collec=graphs.filter_todnaall(self.complexName,self.between,self.spp,self.per,self.intType)
-        graphs.draw_fig(df_collec, self.intType, self.complexName[0], self.complexName[1],
-                        self.colors[0], self.colors[1],self.filename, self.spp)
+              f'\n\033[1mUsage example:\033[0m\n\n'
+              " minnie clean -cn sox4 sox18  \n")
     else:
-        df_collec=graphs.filter_todraw(self.complexName,self.chains,self.spp,self.per,self.intType)
-        graphs.draw_fig(df_collec, self.intType, self.complexName[0], self.complexName[1],
-                        self.colors[0], self.colors[1],self.filename, self.spp)
-    #except TypeError:
-    #    print(f'\nPlease check given parameters''')
+        try:
+            core.clean.cleanx(self.complexName[0])
+        except FileNotFoundError:
+            print(f'Nothing to clean inside {self.complexName[0]}')
 
-    #except Exception:
-    #    print(f'\nPlease, either use -b or -c option''')
-
-
-
-
+        try:
+            core.clean.cleanx(self.complexName[1])
+        except FileNotFoundError:
+            print(f'Nothing to clean inside {self.complexName[1]}')
 
 
 
