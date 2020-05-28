@@ -64,7 +64,7 @@ minnie splitpdbs -cn sox4 sox18 -p sox4.pdb sox18.pdb
 **2) When the individual frames are generated in your project folders, their inter-monomer interactions (hydrogen bonds, ionic, hydrophobic and ring stacking interactions) are calculated with the `findbonds` option. The interactions here are calculated with the interfacea python package.**\
 \
 The results are saved in the csv format under projectID1/03_interfacea_results & projectID2/03_interfacea_results.\
-You also have option to calculate intra-monomer interactions with **`-intra True`** flag.
+**`-i all`** calculates hbonds, ionic, hydrophobic, ring_stacking interactions. You also have option to calculate intra-monomer interactions with **`-intra True`** flag. 
 ```
 minnie findbonds -cn projectID1 -p projectID1/02_frames/* -i all
 
