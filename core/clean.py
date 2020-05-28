@@ -2,5 +2,5 @@ import shutil
 
 
 
-def clean(complexName):
+def cleanx(complexName):
     shutil.rmtree(f'{complexName}/02_frames')

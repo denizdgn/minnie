@@ -122,7 +122,6 @@ def filter_todraw(complexName,chains,spp,per,bondtype):
             d = d.append(c)
 
         df_collec = df_collec.append(d)
-    print(df_collec)
 
     return df_collec
 
@@ -219,7 +218,7 @@ def draw_fig(df_hbond_collec, BondType, fName, sName, fcolor, scolor,filename,sp
         plt.legend(c, texts, bbox_to_anchor=(1.55, 0.95), loc='center', handler_map={mpatches.Rectangle: HandlerEllipse()})
         plt.locator_params(axis="both", integer=True, tight=True)
 
-        logging.info("Drawing graph... {}".format(BondType))
+        logging.info("Drawing graph for {} bonds...".format(BondType))
 
         if filename:
             if os.path.exists(f'{pathy}/{filename}_{spp}.png'):
