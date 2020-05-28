@@ -114,7 +114,7 @@ minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s common
 ```
 
 All of the example toy-model-related commands are provided in pipeline.sh
-\
+
 **6) Aaaand, To visualize minnie results with Pymol**\
 \
 To be run in projectID/05_compare_complex/\*_freq_filtered/\*_freq_perres/complex_specific_
@@ -126,7 +126,7 @@ sed 's/,/ /g' *_hbonds_compared_*_perres.csv | grep "protein-dna" | grep ":" | a
 ```
 
  Options to visualize each bond type are added to pipeline.sh !!
-\\
+
 **7) Finally, to clean unnecessary folders**
 
  ```
