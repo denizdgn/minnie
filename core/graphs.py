@@ -31,7 +31,9 @@ logging.basicConfig(stream=sys.stdout,
 
 
 def filter_todnaall(complexName,between,spp,per,bondtype):
-
+    """
+    To get interactions  at the protein-DNA interface or all
+    """
     pathx = os.getcwd()
     if spp == "specific":
         spec = "spec"
@@ -75,6 +77,9 @@ def filter_todnaall(complexName,between,spp,per,bondtype):
 
 
 def filter_todraw(complexName,chains,spp,per,bondtype):
+    """
+    To get filter data via chainIDs
+    """
 
     pathx = os.getcwd()
     if spp == "specific":
@@ -230,19 +235,3 @@ def draw_fig(df_hbond_collec, BondType, fName, sName, fcolor, scolor,filename,sp
             plt.close("all")
     except ValueError:
         logging.info(f'No drawable {BondType} interactions..')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

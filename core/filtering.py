@@ -174,17 +174,22 @@ def compare_bonds(complexName,per):
 
 
     ToCompare = {}
+
     for filex in file_lists_freq:
         file = os.path.basename(filex)
-        Name = file.split("_")[0]
-        bondtype = file.split("_")[1].split("_")[0]
+
+        if fName in filex:
+            Name = fName
+        else:
+            Name = sName
+        bondtype = file.split(f'{Name}_')[1].split("_")[0]
         if bondtype == "ring":
             bondtype = "ring_stacking"
-        first = pd.read_csv(filex)
-        if bondtype in ToCompare.keys():
-            ToCompare[bondtype].update({Name: first})
-        else:
-            ToCompare.update({bondtype: {Name: first}})
+            first = pd.read_csv(filex)
+            if bondtype in ToCompare.keys():
+                ToCompare[bondtype].update({Name: first})
+            else:
+                ToCompare.update({bondtype: {Name: first}})
 
     for bondtype in ToCompare.keys():
         os.chdir(pathx)
@@ -329,23 +334,3 @@ def compare_bonds(complexName,per):
         com_spp="common"
         pathl_common=get_paths(pathz,str(per),fold,com_spp)
         common_sec_perres.to_csv (pathl_common+"/"+sName+"_"+bondtype+"_compared_common_perres.csv", index=False)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
