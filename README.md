@@ -101,9 +101,9 @@ minnie compareCX -cn sox4 sox18 --per 25
 
 **5) The common and distinct interaction distribution comparisons are delivered as box-and-whisker plots.**
 ```
-minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b molecule_type -s specific
+minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b interaction_type -s specific
 
-minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b molecule_type -s common
+minnie graph -cn 'projectID1' 'projectID2' --per 25 -i all -b interaction_type -s common
 ```
 which translate into the following for our toy model:
 ```
@@ -112,7 +112,7 @@ minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s specific
 minnie graph -cn 'sox4' 'sox18' --per 25 -i all -b protein-dna -s common
 ```
 
-All of the example toy-model-related commands are provided in pipeline.sh\
+All of the example toy-model-related commands are provided in pipeline.sh
 \
 **6) Aaaand, To visualize minnie results with Pymol**\
 \
