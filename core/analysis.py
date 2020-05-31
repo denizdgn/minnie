@@ -7,13 +7,9 @@ import itertools
 import glob
 import pathos
 
-
-
-logging.basicConfig(stream=sys.stdout,
-                    level=logging.INFO,
-                    format='[%(asctime)s] %(message)s',
-                    datefmt='%Y/%m/%d %H:%M:%S')
-
+# Setup logger
+# _private name to prevent collision/confusion with parent logger
+logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
 def split_pdbs(target,complexName):
@@ -184,17 +180,3 @@ def combine_interfacea_results(complexName):
     pool = pathos.multiprocessing.ProcessingPool(pathos.multiprocessing.cpu_count() - 2)
     pool.map(os.remove, del_files)
     pool.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-

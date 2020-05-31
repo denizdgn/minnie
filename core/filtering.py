@@ -6,11 +6,9 @@ import re
 import numpy as np
 import logging
 
-
-logging.basicConfig(stream=sys.stdout,
-                    level=logging.INFO,
-                    format='[%(asctime)s] %(message)s',
-                    datefmt='%Y/%m/%d %H:%M:%S')
+# Setup logger
+# _private name to prevent collision/confusion with parent logger
+logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
 #inside pathx (MD)

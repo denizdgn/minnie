@@ -17,17 +17,12 @@ import itertools
 pd.options.mode.chained_assignment = None
 import datetime
 
+# Setup logger
+# _private name to prevent collision/confusion with parent logger
+logging.getLogger(__name__).addHandler(logging.NullHandler())
+
 now = datetime.datetime.now()
 timestamp=now.strftime("%H.%M.%S")
-
-
-
-
-logging.basicConfig(stream=sys.stdout,
-                    level=logging.INFO,
-                    format='[%(asctime)s] %(message)s',
-                    datefmt='%Y/%m/%d %H:%M:%S')
-
 
 
 def filter_todnaall(complexName,between,spp,per,bondtype):

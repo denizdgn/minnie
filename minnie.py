@@ -14,8 +14,13 @@ import pathos
 from pathos.multiprocessing import ProcessingPool as Pool
 
 
-
-
+# Setup top-level logger
+logging.basicConfig(
+    stream=sys.stdout,
+    level=logging.INFO,
+    format='[%(asctime)s] %(message)s',
+    datefmt='%Y/%m/%d %H:%M:%S'
+)
 
 
 ###### ---- Preparations ---- ######
