@@ -19,5 +19,5 @@ Cleaning scripts.
 import shutil
 
 
-def cleanx(complexName):
-    shutil.rmtree(f'{complexName}/02_frames')
+def cleanx(project_id):
+    shutil.rmtree(f'{project_id}/02_frames')
