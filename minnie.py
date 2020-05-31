@@ -21,7 +21,6 @@ binding
 
 import argparse
 import logging
-import os
 import pathlib
 import sys
 
@@ -29,7 +28,8 @@ import pathos
 from pathos.multiprocessing import ProcessingPool as Pool
 
 from core.subcommands import (  # eventually this should be minnie.core
-    splitpdbs
+    splitpdbs,
+    findbonds
 )
 
 
@@ -42,7 +42,8 @@ logging.basicConfig(
 )
 
 SUBCOMMANDS = {
-    'splitpdbs': splitpdbs
+    'splitpdbs': splitpdbs,
+    'findbonds': findbonds,
 }
 
 # # Decorator to mark subcommands.
@@ -327,9 +328,17 @@ SUBCOMMANDS = {
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(prog='minnie', description=__doc__)
-    subparsers = parser.add_subparsers(dest="subcommand")
+    parser.add_argument(
+        '--nproc',
+        default=None,
+        type=int,
+        help='Number of processes to use for parallel execution.'
+    )
 
     # Setup subparsers
+    subparsers = parser.add_subparsers(dest="subcommand")
+
+    # minnie splitpdb
     splitpdb = subparsers.add_parser(
         'splitpdbs',
         help='Split a trajectory into single frames'
@@ -348,6 +357,66 @@ if __name__ == "__main__":
         dest='project_ids',
         help='Project ID for your analyses. One per trajectory.',
     )
+
+    # minnie findbonds
+    findbonds = subparsers.add_parser(
+        'findbonds',
+        help='Calculates interactions between and/or within monomers'
+    )
+    findbonds.add_argument(
+        '-i'
+        '--id',
+        nargs='+',
+        type=str,
+        dest='project_id',
+        help='Project ID for your analysis.',
+    )
+    inputopts = findbonds.add_mutually_exclusive_group(required=True)
+    inputopts.add_argument(
+        '-f',
+        '--pdbfile',
+        type=pathlib.Path,
+        help='Input PDB file in PDB format.'
+    )
+    inputopts.add_argument(
+        '-d',
+        '--folder',
+        type=pathlib.Path,
+        help='Input directory with PDB files.'
+    )
+    findbonds.add_argument(
+        '--itypes',
+        choices=[
+            'hbonds',
+            'ionic',
+            'hydrophobic',
+            'ring_stacking',
+            'all'
+        ],
+        nargs='+',
+        default=['hbonds'],
+        type=str,
+        dest='itypes',
+        help='Interaction types to analyze.',
+    )
+    findbonds.add_argument(
+        '--intra',
+        action='store_true',
+        help='Include intra-monomer interactions.',
+    )
+    findbonds.add_argument(
+        '--clean',
+        action='store_true',
+        help='Remove intermediate files upon completion.',
+    )
+
+
+    # Parse unknown args to function
+    # from https://stackoverflow.com/a/37367814
+    parsed, unknown = parser.parse_known_args()
+    for argname in unknown:
+        if argname.startswith(("-", "--")):
+            findbonds.add_argument(argname)
 
     args = parser.parse_args()
     logging.info(f'{" ".join(sys.argv)}')
