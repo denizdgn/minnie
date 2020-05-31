@@ -16,14 +16,13 @@
 Analysis functions.
 """
 
-
-import os
-import pandas as pd
-import logging
-import sys
-import interfacea as ia
-import itertools
 import glob
+import itertools
+import logging
+import os
+
+import interfacea as ia
+import pandas as pd
 import pathos
 
 # Setup logger

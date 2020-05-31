@@ -16,24 +16,20 @@
 Plotting and visualization functions.
 """
 
-import pandas as pd
-import sys
-import glob
-import os
+import datetime
+import itertools
 import logging
-import seaborn as sns
-import re
-import numpy as np
-import matplotlib as mpl
+import os
+
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-import matplotlib.patches as patches
 from matplotlib.legend_handler import HandlerPatch
-import math
-from collections import OrderedDict
-import itertools
+
+import pandas as pd
+import seaborn as sns
+
+
 pd.options.mode.chained_assignment = None
-import datetime
 
 # Setup logger
 # _private name to prevent collision/confusion with parent logger

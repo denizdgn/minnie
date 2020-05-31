@@ -19,20 +19,19 @@ minnie
   a structural ensemble analysis package to deduce the fingerprints of binding
 """
 
-import os
-import pandas as pd
-import logging
-import sys
 import argparse
-import core
-from  core import analysis
-from  core import filtering
-from core import graphs
-from  core import clean
-import glob
+import logging
+import os
+import sys
+
 import pathos
 from pathos.multiprocessing import ProcessingPool as Pool
 
+import core
+from core import analysis
+from core import filtering
+from core import graphs
+from core import clean
 
 # Setup top-level logger
 logging.basicConfig(

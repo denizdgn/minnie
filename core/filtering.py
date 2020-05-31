@@ -16,13 +16,11 @@
 Filtering functions.
 """
 
-import pandas as pd
-import sys
 import glob
-import os
-import re
-import numpy as np
 import logging
+import os
+
+import pandas as pd
 
 # Setup logger
 # _private name to prevent collision/confusion with parent logger
