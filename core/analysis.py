@@ -20,6 +20,7 @@ import glob
 import itertools
 import logging
 import os
+import pathlib
 
 import interfacea as ia
 import pandas as pd
@@ -30,34 +31,38 @@ import pathos
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
-def split_pdbs(target,complexName):
+def split_pdbs(pdbfile, project_id):
+    """Splits a multi-model PDB file into individual PDB files.
 
-    logging.info(f'Splitting {complexName.upper()} ..')
-    pathx=os.getcwd()
-    if not os.path.exists(f'{complexName}/02_frames'):
-        os.makedirs(f'{complexName}/02_frames', exist_ok=True)
-    pathxx =  f'{pathx}/{complexName}/02_frames'
+    Arguments
+    ---------
+        pdbfile : pathlib.Path
+            input PDB file to process.
+        project_id : str
+            identifier for this complex.
+    """
 
+    logging.info(f'Splitting {project_id} ...')
 
-    fp = open(target, 'r')
-    xx = []
-    i = 0
-    for line in fp:
-        if line.startswith("ATOM"):
-            xx.append(line.rstrip())
-        elif line.startswith("TER"):
-            xx.append(line.rstrip())
-        elif line.startswith("HETATM"):
-            xx.append(line.rstrip())
-        elif line.startswith("END"):
-            xx.append("END")
-            aa = pd.DataFrame(xx)
-            aa.to_csv(pathxx + "/md_" + str(i) + ".pdb", index=None, header=False)
-            xx = []
-            i = i + 1
-            logging.info(f'END stated {i} number of times')
+    curdir = pathlib.Path('.').resolve(strict=True)
+    output_dir = curdir / project_id / '02_frames'
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    fp.close()
+    with open(pdbfile, 'r') as pdblines:
+        model = []
+        model_no = 0
+        for line in pdblines:
+            if line.startswith(('ATOM', 'HETATM', 'TER')):
+                model.append(line)
+            elif line.startswith('ENDMDL'):
+                fpath = output_dir / f'md_{model_no}.pdb'
+                with open(fpath, 'w') as outfile:
+                    model.append('END')
+                    print(''.join(model), file=outfile)
+                model = []
+                model_no += 1
+
+    logging.info(f'Read {model_no} models from input file.')
 
 
 def paste(x: 'donor_resnm', y: 'donor_resid', a=None, b=None,sep=""):
