@@ -16,10 +16,7 @@
 Analysis functions.
 """
 
-import glob
-import itertools
 import logging
-import os
 import pathlib
 
 import interfacea as ia
@@ -64,7 +61,7 @@ def split_pdbs(pdbfile, project_id):
     logging.info(f'Read {model_no} models from input file.')
 
 
-def paste(x: 'donor_resnm', y: 'donor_resid', a=None, b=None,sep=""):
+def paste(x='donor_resnm', y='donor_resid', a=None, b=None, sep=""):
     """
 
     :param x: donor_resnm
@@ -74,10 +71,10 @@ def paste(x: 'donor_resnm', y: 'donor_resid', a=None, b=None,sep=""):
     :return: pasted variables as string
     Ex: paste("a","b") // out: 'ab'
     """
-    if a != None :
-        return str (x) + str (y) + str(sep) + str (a) + str (b)
-    else :
-        return str (x)+ str(sep) + str (y)
+    if a is not None:
+        return str(x) + str(y) + str(sep) + str(a) + str(b)
+    else:
+        return str(x) + str(sep) + str(y)
 
 
 def comb_int(pdbfile, project_id, itype, include_intra=False, **kwargs):
