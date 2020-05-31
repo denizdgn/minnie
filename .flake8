@@ -1,0 +1,9 @@
+ignore = D203
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+    interfacea,
+    example_run
+max-complexity = 10

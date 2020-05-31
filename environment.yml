@@ -17,3 +17,7 @@ dependencies:
   - pathos
   - pdbfixer
   - seaborn
+
+  # Developer dependencies
+  - pip:
+    - pre-commit
