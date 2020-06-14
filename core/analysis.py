@@ -1,52 +1,67 @@
-import os
-import pandas as pd
+# Copyright 2020 Deniz Dogan, Ezgi Karaca
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Analysis functions.
+"""
+
 import logging
-import sys
+import pathlib
+
 import interfacea as ia
-import itertools
-import glob
-import pathos
+import pandas as pd
+
+# Setup logger
+# _private name to prevent collision/confusion with parent logger
+logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
+def split_pdbs(pdbfile, project_id):
+    """Splits a multi-model PDB file into individual PDB files.
 
-logging.basicConfig(stream=sys.stdout,
-                    level=logging.INFO,
-                    format='[%(asctime)s] %(message)s',
-                    datefmt='%Y/%m/%d %H:%M:%S')
+    Arguments
+    ---------
+        pdbfile : pathlib.Path
+            input PDB file to process.
+        project_id : str
+            identifier for this complex.
+    """
 
+    logging.info(f'Splitting {project_id} ...')
 
+    curdir = pathlib.Path('.').resolve(strict=True)
+    output_dir = curdir / project_id / '02_frames'
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-def split_pdbs(target,complexName):
+    with open(pdbfile, 'r') as pdblines:
+        model = []
+        model_no = 0
+        for line in pdblines:
+            if line.startswith(('ATOM', 'HETATM', 'TER')):
+                model.append(line)
+            elif line.startswith('ENDMDL'):
+                fpath = output_dir / f'md_{model_no}.pdb'
+                with open(fpath, 'w') as outfile:
+                    model.append('END')
+                    print(''.join(model), file=outfile)
+                model = []
+                model_no += 1
 
-    logging.info(f'Splitting {complexName.upper()} ..')
-    pathx=os.getcwd()
-    if not os.path.exists(f'{complexName}/02_frames'):
-        os.makedirs(f'{complexName}/02_frames', exist_ok=True)
-    pathxx =  f'{pathx}/{complexName}/02_frames'
-
-
-    fp = open(target, 'r')
-    xx = []
-    i = 0
-    for line in fp:
-        if line.startswith("ATOM"):
-            xx.append(line.rstrip())
-        elif line.startswith("TER"):
-            xx.append(line.rstrip())
-        elif line.startswith("HETATM"):
-            xx.append(line.rstrip())
-        elif line.startswith("END"):
-            xx.append("END")
-            aa = pd.DataFrame(xx)
-            aa.to_csv(pathxx + "/md_" + str(i) + ".pdb", index=None, header=False)
-            xx = []
-            i = i + 1
-            logging.info(f'END stated {i} number of times')
-
-    fp.close()
+    logging.info(f'Read {model_no} models from input file.')
 
 
-def paste(x: 'donor_resnm', y: 'donor_resid', a=None, b=None,sep=""):
+def paste(x='donor_resnm', y='donor_resid', a=None, b=None, sep=""):
     """
 
     :param x: donor_resnm
@@ -56,145 +71,169 @@ def paste(x: 'donor_resnm', y: 'donor_resid', a=None, b=None,sep=""):
     :return: pasted variables as string
     Ex: paste("a","b") // out: 'ab'
     """
-    if a != None :
-        return str (x) + str (y) + str(sep) + str (a) + str (b)
-    else :
-        return str (x)+ str(sep) + str (y)
-
-
-
-def comb_int(pdb: "pdb file",complexName,intType:"interaction type",includeIntra,hbond_distance):
-
-    pathx=os.getcwd()
-
-    if not os.path.exists(f'{complexName}/03_interfacea_results/{intType}'):
-        os.makedirs(f'{complexName}/03_interfacea_results/{intType}', exist_ok=True)
-    pwrite =  f'{pathx}/{complexName}/03_interfacea_results/{intType}'
-
-    ia.set_log_level ('minimal')
-    mol = ia.read (pdb)
-    analyzer = ia.InteractionAnalyzer (mol)
-
-    if not str(intType) == "hbonds":
-        y="get_"+str(intType)
-        b= getattr(analyzer,y)
-        if str(includeIntra) == "False":
-            b()
-        else:
-            b(include_intra=includeIntra)
-        bb = analyzer.itable._table
+    if a is not None:
+        return str(x) + str(y) + str(sep) + str(a) + str(b)
     else:
-        if str(includeIntra) == "False":
-            analyzer.get_hbonds (max_distance=float (hbond_distance))
+        return str(x) + str(sep) + str(y)
+
+
+def comb_int(pdbfile, project_id, itype, include_intra=False, **kwargs):
+    """Analyzes the interactions in one or more PDB files.
+
+    Arguments
+    ---------
+        ....
+    """
+
+    curdir = pathlib.Path('.').resolve(strict=True)
+    output_dir = curdir / project_id / '03_interfacea_results' / f'{itype}'
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Setup interfacea
+    ia.set_log_level('minimal')
+    mol = ia.read(str(pdbfile))  # convert from Path to str.
+    analyzer = ia.InteractionAnalyzer(mol)
+
+    func = getattr(analyzer, f'get_{itype}', None)
+    if func is None:
+        raise ValueError(
+            f'Unknown analysis function: get_{itype}'
+        )
+
+    kwargs['include_intra'] = include_intra
+    func(**kwargs)
+
+    df_table = analyzer.itable._table
+    df_table.columns = [
+        'itype', 'donor_chain', 'acceptor_chain', 'donor_resnm',
+        'acceptor_resnm', 'donor_resid', 'acceptor_resid',
+        'donor_atom', 'acceptor_atom'
+    ]
+
+    if len(df_table) == 0:
+        logging.info(
+            f'No interactions of type "{itype}" found in input file'
+        )
+        return
+
+    donor_list = df_table.apply(
+        lambda x: x['donor_resnm'] + str(x['donor_resid']),
+        axis=1
+    )
+    df_table.loc[:, 'donor'] = donor_list
+
+    donorC_list = df_table.apply(
+        lambda x, sep="_": x['donor'] + "_" + str(x['donor_chain']),
+        axis=1
+    )
+    df_table.loc[:, 'donorC'] = donorC_list
+
+    acceptor_list = df_table.apply(
+        lambda x: x['acceptor_resnm'] + str(x['acceptor_resid']),
+        axis=1
+    )
+    df_table.loc[:, 'acceptor'] = acceptor_list
+
+    acceptorC_list = df_table.apply(
+        lambda x, sep="_": x['acceptor'] + "_" + str(x['acceptor_chain']),
+        axis=1
+    )
+    df_table.loc[:, 'acceptorC'] = acceptorC_list
+
+    donor_acceptor_list = df_table.apply(
+        lambda x, sep=":": x['donorC'] + sep + str(x['acceptorC']),
+        axis=1
+    )
+    df_table.loc[:, 'donor_acceptor'] = donor_acceptor_list
+
+    chain_type = df_table.apply(
+        lambda x: (
+            "intra" if (x["acceptor_chain"] == x["donor_chain"])
+            else "inter"
+        ),
+        axis=1
+    )
+    df_table.loc[:, 'chain_type'] = chain_type
+
+    # You could probably move this to a data.py module.
+    # Made them sets since you are doing 'x in y' operations.
+    protein_residues = {
+        'ALA', 'ASN', 'CYS', 'GLU', 'HIS', 'LEU', 'MET', 'PRO', 'THR',
+        'TYR', 'ARG', 'ASP', 'GLN', 'GLY', 'ILE', 'LYS', 'PHE', 'SER',
+        'TRP', 'VAL'
+    }
+    dna_residues = {'DA', 'DC', 'DG', 'DT'}
+
+    prot_or_dna = []
+    for i in range(len(df_table.donor_resnm)):
+        d_is_dna = df_table.donor_resnm[i] in dna_residues
+        d_is_prot = df_table.donor_resnm[i] in protein_residues
+        a_is_dna = df_table.acceptor_resnm[i] in dna_residues
+        a_is_prot = df_table.acceptor_resnm[i] in protein_residues
+
+        if d_is_dna and a_is_dna:
+            cmplx_type = 'dna-dna'
+        elif d_is_prot and a_is_prot:
+            cmplx_type = 'protein-protein'
+        elif (d_is_dna and a_is_prot) or (d_is_prot and a_is_dna):
+            cmplx_type = 'protein-dna'
         else:
-            analyzer.get_hbonds(include_intra=includeIntra, max_distance=float(hbond_distance))
-        bb = analyzer.itable._table
+            cmplx_type = 'other'  # because why not?
 
-    bonds = bb
-    bonds.columns = ['itype', 'donor_chain', 'acceptor_chain', 'donor_resnm', 'acceptor_resnm', 'donor_resid',
-                     'acceptor_resid', 'donor_atom', 'acceptor_atom']
-    df_table = bonds
+        prot_or_dna.append(cmplx_type)
+    df_table["prot_or_dna"] = prot_or_dna
 
-    try:
-        donor_list=df_table.apply(lambda x: x['donor_resnm'] + str(x['donor_resid']), axis=1)
-        df_table.loc[:, 'donor'] = donor_list
+    # renumber index of hbond dataframe
+    df_table.index = list(range(len(df_table)))
 
+    if itype == 'hbonds':
+        non_spp_atoms = {
+            "O2P", "O1P", "N", "O", "OC1", "OC2",
+            "O4'", "O5'", "O3'", "H", "HA"
+        }
+        x = []  # what is x?!
+        for i in df_table.index:
+            x_acc = df_table["acceptor_atom"][i] in non_spp_atoms
+            x_donor = df_table["acceptor_atom"][i] in non_spp_atoms
+            if (x_acc or x_donor):
+                x.append("non-specific")
+            else:
+                x.append("specific")
+        df_table['specificity'] = x
 
-        donorC_list=df_table.apply(lambda x,sep="_": x['donor'] +"_"+ str(x['donor_chain']), axis=1)
-        df_table.loc[:, 'donorC'] = donorC_list
+    frame_no = pdbfile.stem.split('md_')[1]
+    df_table["time"] = [frame_no] * len(df_table)
 
-        acceptor_list=df_table.apply(lambda x: x['acceptor_resnm'] + str(x['acceptor_resid']), axis=1)
-        df_table.loc[:, 'acceptor'] = acceptor_list
-
-        acceptorC_list=df_table.apply(lambda x,sep="_": x['acceptor'] +"_"+ str(x['acceptor_chain']), axis=1)
-        df_table.loc[:, 'acceptorC'] = acceptorC_list
-
-        donor_acceptor_list = df_table.apply(lambda x, sep=":": x['donorC'] + sep + str(x['acceptorC']), axis=1)
-        df_table.loc[:, 'donor_acceptor'] = donor_acceptor_list
-
-
-
-        chain_type = df_table.apply(lambda x: "intra" if (x["acceptor_chain"] == x["donor_chain"]) else "inter", axis=1)
-        df_table.loc[:, 'chain_type'] = chain_type
-
-
-
-        proteinResidues = ['ALA', 'ASN', 'CYS', 'GLU', 'HIS', 'LEU', 'MET', 'PRO', 'THR', 'TYR', 'ARG', 'ASP', 'GLN',
-                           'GLY', 'ILE', 'LYS', 'PHE', 'SER', 'TRP', 'VAL']
-        dnaResidues = ['DA', 'DC', 'DG', 'DT']
-
-        prot_or_dna = []
-        for i in range(len(df_table.donor_resnm)):
-            if (((df_table.donor_resnm[i] in dnaResidues) and (df_table.acceptor_resnm[i] in proteinResidues)) or
-                    ((df_table.donor_resnm[i] in proteinResidues) and (df_table.acceptor_resnm[i] in dnaResidues))):
-                prot_or_dna.append("protein-dna")
-            elif (((df_table.donor_resnm[i] in proteinResidues) and (df_table.acceptor_resnm[i] in proteinResidues)) or
-                  ((df_table.donor_resnm[i] in proteinResidues) and (df_table.acceptor_resnm[i] in proteinResidues))):
-                prot_or_dna.append("protein-protein")
-            elif (((df_table.donor_resnm[i] in dnaResidues) and (df_table.acceptor_resnm[i] in dnaResidues)) or
-                  ((df_table.donor_resnm[i] in dnaResidues) and (df_table.acceptor_resnm[i] in dnaResidues))):
-                prot_or_dna.append("dna-dna")
-        df_table["prot_or_dna"] = prot_or_dna
+    logging.info(f'Writing "{itype}" bonds to disk...')
+    df_table.to_csv(
+        str(output_dir / f'md_{frame_no}.pdb_{itype}_all.csv'),
+        index=False
+    )
 
 
+def combine_interfacea_results(project_id, clean=False):
 
+    curdir = pathlib.Path('.').resolve(strict=True)
+    output_dir = curdir / project_id / '03_interfacea_results'
+    output_dir = output_dir.resolve(strict=True)
 
-        # renumber index of hbond dataframe
-        df_table.index = range (len (df_table))
+    for child in output_dir.iterdir():
+        if child.is_dir():
+            logging.info(f'processing csv files in {child} ..')
 
-        if str(intType) == "hbonds" :
-            non_spp_atoms = ["O2P", "O1P", "N", "O", "OC1", "OC2", "O4'", "O5'", "O3'", "H", "HA"]
-            x = []
-            for i in range (len (df_table)) :
-                if (df_table["acceptor_atom"][i] or df_table["donor_atom"][i]) in non_spp_atoms :
-                    x.append ("non-specific")
-                else :
-                    x.append ("specific")
-            df_table.loc[:, 'specificity'] = x
+            dfx = pd.DataFrame()
+            for csvfile in child.rglob('*all.csv'):  # recursive find!
+                df = pd.read_csv(csvfile)
+                dfx = dfx.append(df)  # very slow!
 
-        time = pdb.split("md_")[1].split(".")[0]
-        times = list(itertools.repeat(time, len(df_table)))
-        df_table.loc[:, "time"] = times
-        logging.info("Writing %s bonds to files...", intType)
-        df_table.to_csv(f'{pwrite}/md_{time}.pdb_{intType}_all.csv', index=False)
+            logging.info(f'writing combined analysis to {child}')
+            dfx.to_csv(
+                str(child / f'{project_id}_merged_{child.stem}.csv'),
+                index=False
+            )
 
-    except ValueError:
-        logging.info(f'Found 0 {intType} interactions !!')
-
-
-def combine_interfacea_results(complexName):
-    pathx=os.getcwd()
-
-
-    folders = glob.glob(f'{pathx}/{complexName}/03_interfacea_results/*/')
-    for dolf in folders:
-        bondtype = dolf.split("03_interfacea_results/")[1].split("/")[0]
-        files = glob.glob(dolf + "/*all.csv")
-        dfx = pd.DataFrame()
-        logging.info(f'processing files in {dolf} ..')
-        for file in files:
-            df = pd.read_csv(file)
-            dfx = dfx.append(df)
-        logging.info(f'writing to folder {dolf} ..')
-        dfx.to_csv(f'{dolf}/{complexName}_merged_{bondtype}.csv', index=False)
-        os.chdir(pathx)
-
-
-    del_files = glob.glob(f'{pathx}/{complexName}/03_interfacea_results/*/*all.csv')
-    pool = pathos.multiprocessing.ProcessingPool(pathos.multiprocessing.cpu_count() - 2)
-    pool.map(os.remove, del_files)
-    pool.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # Remove intermediate files
+    if clean:
+        logging.info('removing intermediate files..')
+        for csvfile in output_dir.rglob('*all.csv'):
+            csvfile.unlink()
