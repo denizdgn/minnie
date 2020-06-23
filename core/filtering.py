@@ -206,7 +206,7 @@ def compare_bonds(project_id, per):
             else:
                 spp = "common"
             logging.info("{} list to {}".format(llist[0], name))
-            spp_first_perres.to_csv(pathl_spp + "/" + fname + "_" +
+            spp_first_perres.to_csv(pathl_spp + "/" + name + "_" +
                                     f'{bondtype}_compared_{spp}_perres.csv',
                                     index=False)
 
@@ -244,11 +244,9 @@ def compare_bonds(project_id, per):
         os.chdir(pathx)
         pathy = f'{pathx}/{fname}/04_compare_complex'
         os.makedirs(f'{pathx}/{fname}/04_compare_complex', exist_ok=True)
-        os.chdir(pathy)
 
         pathz = f'{pathx}/{sname}/04_compare_complex'
         os.makedirs(f'{pathx}/{sname}/04_compare_complex', exist_ok=True)
-        os.chdir(pathz)
 
         # FIRST complex
         make_freq_folders(pathy, per)
@@ -266,9 +264,9 @@ def compare_bonds(project_id, per):
         logging.info("sname : {}".format(sname))
 
         fold = "_freq_perres"
-        patha = f'{pathx}/{sname}/03_time_freq_filter/' \
+        pathb = f'{pathx}/{sname}/03_time_freq_filter/' \
                 f'{str(per)}_freq_filtered/{str(per)}{fold}'
-        sec = pd.read_csv(patha + "/" + sname + "_" + f'{bondtype}' +
+        sec = pd.read_csv(pathb + "/" + sname + "_" + f'{bondtype}' +
                           "_" + str(per) + fold + ".csv")
 
         # find and write bonds specific to first one
