@@ -49,9 +49,9 @@ class guivar:
 
 
                  f'\n\033[1mUsage example:\033[0m\n\n'
-                 " Single frame      - minnie findbonds -i sox4 -f 'sox4/02_frames/md_0.pdb' --itypes all \n"
-                 " Multiple frames   - minnie findbonds -i sox4 -d 'sox4/02_frames/' --clean \n"
-                 " Multiple frames   - minnie findbonds -i sox4 -d 'sox4/02_frames/' -intra \n"]
+                 " Single frame      - minnie findbonds -i sox4 -f 'sox4/01_frames/md_0.pdb' --itypes all \n"
+                 " Multiple frames   - minnie findbonds -i sox4 -d 'sox4/01_frames/' --clean \n"
+                 " Multiple frames   - minnie findbonds -i sox4 -d 'sox4/01_frames/' -intra \n"]
     timefilter = ['%(prog)s\n'
                   f'                        -i, --id     <string> <string>     \n '
                   f'                                      sProject ID of your complex\n\n'
@@ -62,8 +62,8 @@ class guivar:
                   f'                                                Observation frequency to classify an interaction as critical\033[0m \n\n\n\n'
 
                   f'\n\033[1mUsage example:\033[0m\n\n'
-                  " Single file    - minnie timefilter -f sox4/03_interfacea_results/hbonds/sox4_merged_hbonds.csv -i sox4 --per 25  \n"
-                  " Multiple files - minnie timefilter -f sox4/03_interfacea_results/*/sox4_merged_*.csv -i sox4 --per 25  \n"]
+                  " Single file    - minnie timefilter -f sox4/02_interfacea_results/hbonds/sox4_merged_hbonds.csv -i sox4 --per 25  \n"
+                  " Multiple files - minnie timefilter -f sox4/02_interfacea_results/*/sox4_merged_*.csv -i sox4 --per 25  \n"]
     comparecx = ['%(prog)s\n'
                  f'                        -i, --id     <string> <string>     \n '
                  f'                                      sProject ID of your complex\n\n'
