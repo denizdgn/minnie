@@ -19,6 +19,7 @@ Filtering functions.
 import glob
 import logging
 import os
+import sys
 
 import pandas as pd
 
@@ -33,7 +34,10 @@ def time_freq_filter(filex, project_id, per):
     file = os.path.basename(filex)
     fname = project_id
     bondtype = file.split(".csv")[0].split('_merged_')[1]
-    first = pd.read_csv(filex)
+    try:
+        first = pd.read_csv(filex)
+    except:
+        sys.exit(1)
 
     os.makedirs(f'{pathx}/{project_id}/03_time_freq_filter', exist_ok=True)
     pathxx = f'{pathx}/{project_id}/03_time_freq_filter'
@@ -227,11 +231,14 @@ def compare_bonds(project_id, per):
     for filex in file_lists_freq:
         file = os.path.basename(filex)
 
-        if fname in filex:
+        if f'{fname}_' in filex:
             name = fname
         else:
             name = sname
-        bondtype = file.split(f'{name}_')[1].split('_')[0]
+        try:
+            bondtype = file.split(f'{name}_')[1].split('_')[0]
+        except:
+            pass
         if bondtype == "ring":
             bondtype = "ring_stacking"
         first = pd.read_csv(filex)
