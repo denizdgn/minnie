@@ -52,7 +52,7 @@ source ~/.bashrc
 
 **1) Your trajectory should be saved in an ensemble format while different conformers are separated by ENDMDL. Then `splitpdbs` option of minnie is used to split your trajectories into single frames.**\
 \
-The resulting frames are saved under projectID1/02_frames & projectID2/02_frames.
+The resulting frames are saved under projectID1/01_frames & projectID2/01_frames.
 ```
 minnie splitpdbs -cn projectID1 projectID2 -p ensemble1.pdb ensemble2.pdb
 ```
@@ -67,28 +67,28 @@ The results are saved in the csv format under projectID1/03_interfacea_results &
 **`-i all`** calculates hbonds, ionic, hydrophobic, ring_stacking interactions.
 You also have the option to calculate intra-monomer interactions with **`-intra True`** flag.
 ```
-minnie findbonds -cn projectID1 -p projectID1/02_frames/* -i all
+minnie findbonds -cn projectID1 -p projectID1/01_frames/* -i all
 
-minnie findbonds -cn projectID2 -p projectID2/02_frames/* -i all
+minnie findbonds -cn projectID2 -p projectID2/01_frames/* -i all
 ```
 In the toy model, the project id folders are kept as defined in the previous step, i.e., sox4 & sox18.
 ```
-minnie findbonds -cn sox4 -p sox4/02_frames/* -i all
+minnie findbonds -cn sox4 -p sox4/01_frames/* -i all
 
-minnie findbonds -cn sox18 -p sox18/02_frames/* -i all
+minnie findbonds -cn sox18 -p sox18/01_frames/* -i all
 ```
 \
 **3) The observed interactions are filtered according to a user-defined observation frequency, such that only the interactions that there at least for the x% of the simulation time will be kept. This is achieved with the `timefilter` option.**
 ```
-minnie timefilter -f projectID1/03_interfacea_results/*/projectID1_merged_*.csv -cn projectID1 --per observation_freq
+minnie timefilter -f projectID1/02_interfacea_results/*/projectID1_merged_*.csv -cn projectID1 --per observation_freq
 
-minnie timefilter -f projectID2/03_interfacea_results/*/projectID2_merged_*.csv -cn projectID2 --per observation_freq
+minnie timefilter -f projectID2/02_interfacea_results/*/projectID2_merged_*.csv -cn projectID2 --per observation_freq
 ```
 The toy model interactions, which are observed for at least 25% of the simulation are kept.
 ```
-minnie timefilter -f sox4/03_interfacea_results/*/sox4_merged_*.csv -cn sox4 --per 25
+minnie timefilter -f sox4/02_interfacea_results/*/sox4_merged_*.csv -cn sox4 --per 25
 
-minnie timefilter -f sox18/03_interfacea_results/*/sox18_merged_*.csv -cn sox18 --per 25
+minnie timefilter -f sox18/02_interfacea_results/*/sox18_merged_*.csv -cn sox18 --per 25
 ```
 
 **4) At this step of minnie, common and distinct interaction profiles among the two filtered cases are calculated with the `compareCX` option.**

@@ -41,7 +41,7 @@ def split_pdbs(pdbfile, project_id):
     logging.info(f'Splitting {project_id} ...')
 
     curdir = pathlib.Path('.').resolve(strict=True)
-    output_dir = curdir / project_id / '02_frames'
+    output_dir = curdir / project_id / '01_frames'
     output_dir.mkdir(parents=True, exist_ok=True)
 
     with open(pdbfile, 'r') as pdblines:
@@ -71,7 +71,7 @@ def comb_int(pdbfile, project_id, itype, include_intra=False, **kwargs):
 
     curdir = pathlib.Path('.').resolve(strict=True)
     output_dir = curdir / str(
-        project_id[0]) / '03_interfacea_results' / f'{itype}'
+        project_id[0]) / '02_interfacea_results' / f'{itype}'
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Setup interfacea
@@ -198,7 +198,7 @@ def comb_int(pdbfile, project_id, itype, include_intra=False, **kwargs):
 
 def combine_interfacea_results(project_id, clean=False):
     curdir = pathlib.Path('.').resolve(strict=True)
-    output_dir = curdir / str(project_id[0]) / '03_interfacea_results'
+    output_dir = curdir / str(project_id[0]) / '02_interfacea_results'
     output_dir = output_dir.resolve(strict=True)
 
     for child in output_dir.iterdir():

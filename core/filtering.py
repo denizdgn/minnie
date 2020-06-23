@@ -112,7 +112,7 @@ def time_freq_filter(filex, project_id, per):
 def make_freq_folders(pathy, per):
     """
     Creates folders to write and read common and complex-specific bonds
-    within 05_compare_cx_spp folder
+    within 04_compare_cx_spp folder
 
     """
     import os
@@ -215,10 +215,10 @@ def compare_bonds(project_id, per):
     sname = project_id[1]
 
     file_lists_freq_fname = glob.glob(
-        f'{pathx}/{fname}/04_time_freq_filter/{str(per)}_freq_filtered/'
+        f'{pathx}/{fname}/03_time_freq_filter/{str(per)}_freq_filtered/'
         f'{str(per)}_freq/*csv')
     file_lists_freq_sname = glob.glob(
-        f'{pathx}/{sname}/04_time_freq_filter/{str(per)}_freq_filtered/'
+        f'{pathx}/{sname}/03_time_freq_filter/{str(per)}_freq_filtered/'
         f'{str(per)}_freq/*csv')
 
     file_lists_freq = file_lists_freq_fname + file_lists_freq_sname
@@ -242,12 +242,12 @@ def compare_bonds(project_id, per):
 
     for bondtype in tocompare.keys():
         os.chdir(pathx)
-        pathy = f'{pathx}/{fname}/05_compare_complex'
-        os.makedirs(f'{pathx}/{fname}/05_compare_complex', exist_ok=True)
+        pathy = f'{pathx}/{fname}/04_compare_complex'
+        os.makedirs(f'{pathx}/{fname}/04_compare_complex', exist_ok=True)
         os.chdir(pathy)
 
-        pathz = f'{pathx}/{sname}/05_compare_complex'
-        os.makedirs(f'{pathx}/{sname}/05_compare_complex', exist_ok=True)
+        pathz = f'{pathx}/{sname}/04_compare_complex'
+        os.makedirs(f'{pathx}/{sname}/04_compare_complex', exist_ok=True)
         os.chdir(pathz)
 
         # FIRST complex
@@ -255,7 +255,7 @@ def compare_bonds(project_id, per):
         morefirstxy = tocompare[bondtype][fname]
 
         fold = "_freq_perres"
-        patha = f'{pathx}/{fname}/04_time_freq_filter/' \
+        patha = f'{pathx}/{fname}/03_time_freq_filter/' \
                 f'{str(per)}_freq_filtered/{str(per)}{fold}'
         first = pd.read_csv(patha + "/" + fname + "_" + f'{bondtype}'
                             + "_" + str(per) + fold + ".csv")
@@ -266,7 +266,7 @@ def compare_bonds(project_id, per):
         logging.info("sname : {}".format(sname))
 
         fold = "_freq_perres"
-        patha = f'{pathx}/{sname}/04_time_freq_filter/' \
+        patha = f'{pathx}/{sname}/03_time_freq_filter/' \
                 f'{str(per)}_freq_filtered/{str(per)}{fold}'
         sec = pd.read_csv(patha + "/" + sname + "_" + f'{bondtype}' +
                           "_" + str(per) + fold + ".csv")

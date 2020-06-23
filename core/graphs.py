@@ -52,7 +52,7 @@ def filter_todnaall(project_ids, between, spp, per, itypes):
     df_collec = pd.DataFrame(columns=["time", "len", "uniq", "group", "category", "hue"])
     for Name in project_ids:
         logging.info(f'Processing {Name} ...')
-        ffile_path = f'{pathx}/{Name}/05_compare_complex/{str(per)}_freq_filtered/{str(per)}_freq_perres/{cx_spp}/{Name}_{itypes}_compared_{spec}_perres.csv'
+        ffile_path = f'{pathx}/{Name}/04_compare_complex/{str(per)}_freq_filtered/{str(per)}_freq_perres/{cx_spp}/{Name}_{itypes}_compared_{spec}_perres.csv'
         ffile = pd.read_csv(ffile_path)
 
         selected_ffile = pd.DataFrame()
@@ -100,7 +100,7 @@ def filter_todraw(project_ids, chainIDs, spp, per, itypes):
     df_collec = pd.DataFrame(columns=["time", "len", "uniq", "group", "category", "hue"])
     for Name in project_ids:
         logging.info(f'Processing {Name} ...')
-        ffile_path = f'{pathx}/{Name}/05_compare_complex/{str(per)}_freq_filtered/{str(per)}_freq_perres/{cx_spp}/{Name}_{itypes}_compared_{spec}_perres.csv'
+        ffile_path = f'{pathx}/{Name}/04_compare_complex/{str(per)}_freq_filtered/{str(per)}_freq_perres/{cx_spp}/{Name}_{itypes}_compared_{spec}_perres.csv'
 
         ffile = pd.read_csv(ffile_path)
 
