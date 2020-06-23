@@ -35,8 +35,8 @@ def time_freq_filter(filex, project_id, per):
     bondtype = file.split(".csv")[0].split('_merged_')[1]
     first = pd.read_csv(filex)
 
-    os.makedirs(f'{pathx}/{project_id}/04_time_freq_filter', exist_ok=True)
-    pathxx = f'{pathx}/{project_id}/04_time_freq_filter'
+    os.makedirs(f'{pathx}/{project_id}/03_time_freq_filter', exist_ok=True)
+    pathxx = f'{pathx}/{project_id}/03_time_freq_filter'
     os.chdir(pathxx)
 
     pathy = pathxx + "/" + str(per) + "_freq_filtered"
