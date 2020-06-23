@@ -74,9 +74,9 @@ minnie findbonds -i projectID2 -d 'projectID2/01_frames/' --itypes all --clean
 ```
 In the toy model, the project id folders are kept as defined in the previous step, i.e., sox4 & sox18.
 ```
-minnie findbonds -i sox4 -p 'sox4/01_frames/' --itypes all --clean
+minnie findbonds -i sox4 -d 'sox4/01_frames/' --itypes all --clean
 
-minnie findbonds -i sox18 -p 'sox18/01_frames/' --itypes all --clean
+minnie findbonds -i sox18 -d 'sox18/01_frames/' --itypes all --clean
 ```
 \
 **3) The observed interactions are filtered according to a user-defined observation frequency, such that only the interactions that there at least for the x% of the simulation time will be kept. This is achieved with the `timefilter` option.**
