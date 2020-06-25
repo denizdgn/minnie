@@ -40,7 +40,7 @@ class guivar:
                  f'                        --itypes      [<hbonds>/<ionic>/<hydrophobic>/<ring_stacking>/<all>] (hbonds)'
                  f'\n                                      Calculates which types of interactions \n\n'
 
-                 f'                        -intra        [<"True">/<"False">] ("False")  \n'
+                 f'                        --intra        [<"True">/<"False">] ("False")  \n'
                  f'                                      Include intra-monomer interactions. \033[0m \n\n\n\n'
 
                  f'                        --clean\n'
@@ -51,7 +51,7 @@ class guivar:
                  f'\n\033[1mUsage example:\033[0m\n\n'
                  " Single frame      - minnie findbonds -i sox4 -f 'sox4/01_frames/md_0.pdb' --itypes all \n"
                  " Multiple frames   - minnie findbonds -i sox4 -d 'sox4/01_frames/' --clean \n"
-                 " Multiple frames   - minnie findbonds -i sox4 -d 'sox4/01_frames/' -intra \n"]
+                 " Multiple frames   - minnie findbonds -i sox4 -d 'sox4/01_frames/' --intra \n"]
     timefilter = ['%(prog)s\n'
                   f'                        -i, --id     <string> <string>     \n '
                   f'                                      sProject ID of your complex\n\n'
