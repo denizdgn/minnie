@@ -20,6 +20,7 @@ import datetime
 import itertools
 import logging
 import os
+import sys
 
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
@@ -107,10 +108,8 @@ def filter_todnaall(project_ids, between, spp, per, itypes):
             selected_ffile1 = reformat_subset(subset, itypes)
             selected_ffile = selected_ffile.append(selected_ffile1)
 
-        elif between == "all":
-            selected_ffile = ffile
         else:
-            raise ValueError
+            selected_ffile = ffile
 
         d = prep_graph(selected_ffile, itypes)
 
@@ -158,9 +157,13 @@ def filter_todraw(project_ids, chainIDs, spp, per, itypes):
 
 def draw_fig(df_hbond_collec, itypes, fName, sName,
              fcolor, scolor, *args):
+    if df_hbond_collec.empty:
+        logging.info("No {} bonds to draw a graph ...".format(itypes))
+        sys.exit(1)
+
     pathy = f'{pathx}/graphs'
-    if not os.path.exists(pathy):
-        os.makedirs(pathy, exist_ok=True)
+
+    os.makedirs(pathy, exist_ok=True)
 
     colors = [fcolor, scolor]
     import matplotlib.patches as patches
@@ -189,9 +192,9 @@ def draw_fig(df_hbond_collec, itypes, fName, sName,
     whiskerprops = dict(linestyle='-', linewidth=1.5, color='#7f7f7f')
 
     order = [fName, sName]
-
     ax_box1.set_ylim(min(df_hbond_collec["uniq"]) - 1,
                      max(df_hbond_collec["uniq"]) + 1)
+
     sns.boxplot(data=df_hbond_collec, x="group", y="uniq",
                 ax=ax_box1, palette=colors, order=order,
                 medianprops=medianprops, boxprops=boxprops,
